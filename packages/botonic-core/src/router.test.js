@@ -217,7 +217,7 @@ describe('Process input (v<0.9)', () => {
       'Flow1'
     )
   })
-  test.skip('old protocol:path payload input, root level route (should be ignored)', () => {
+  test('old protocol:path payload input, root level route  with composed path', () => {
     const input = { type: 'postback', path: 'initial/2' }
     const session = {}
     const lastRoutePath = ''
@@ -225,7 +225,7 @@ describe('Process input (v<0.9)', () => {
       'Flow1.2'
     )
   })
-  test.skip('path payload input with deprecated protocol, root level route (should be ignored)', () => {
+  test('path payload input with deprecated protocol, root level route', () => {
     const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
     const session = {}
     const lastRoutePath = ''
@@ -233,12 +233,36 @@ describe('Process input (v<0.9)', () => {
       'Flow1.2'
     )
   })
-  test.skip('old protocol:path payload input with deprecated protocol, 2nd level route (should be ignored)', () => {
-    const input = { type: 'postback', payload: '__PATH_PAYLOAD__initial/2' }
+  test('old protocol:path payload input with deprecated protocol, 2nd level route', () => {
+    const input = { type: 'postback', payload: '__PATH_PAYLOAD__2' }
     const session = {}
     const lastRoutePath = 'initial'
     expect(router.processInput(input, session, lastRoutePath).action).toBe(
       'Flow1.2'
+    )
+  })
+  test('old protocol: path payload input, 3rd level route', () => {
+    const input = { type: 'postback', path: '1' }
+    const session = {}
+    const lastRoutePath = 'initial/3'
+    expect(router.processInput(input, session, lastRoutePath).action).toBe(
+      'Flow1.3.1'
+    )
+  })
+  test('old protocol: payload input, 2nd level route with composed path', () => {
+    const input = { type: 'postback', path: '3/1' }
+    const session = {}
+    const lastRoutePath = 'initial'
+    expect(router.processInput(input, session, lastRoutePath).action).toBe(
+      'Flow1.3.1'
+    )
+  })
+  test('old protocol: path payload input, root level route with composed path', () => {
+    const input = { type: 'postback', path: 'initial/3/1' }
+    const session = {}
+    const lastRoutePath = null
+    expect(router.processInput(input, session, lastRoutePath).action).toBe(
+      'Flow1.3.1'
     )
   })
 })
